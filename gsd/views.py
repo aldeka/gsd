@@ -45,48 +45,36 @@ def index(request):
                 data = request.POST
                 print request.POST
                 name = data["todoName"]
-                context = data["todoContext"]
-                print "Context: " + context
+                due_date = data["todoDueDate"]
+                raw_context = data["todoContext"]
                 
-                # the below is failing
-                '''try:
-                    tags_raw = data["todoTagList"]
-                    print tags_raw
-                except:
-                    tags_raw = []
-                    print "Warning: getting tags failed"
-                print "Successfully got AJAX data"
+                tags_raw = data["todoTagList"]
+                print tags_raw
+                # make tags lowercase, remove spaces, 
+                # and split on commas into a list
+                tag_names = tags_raw.lower().replace(' ','').split(',')
+                tags_objects = []
                 
-                tags = []
+                for tag in tag_names:
+                    t = Tag.objects.get_or_create(name=tag)
+                    tags_objects.append(t)
                 
-                for tag_name in tags_raw:
-                    # remove all extraneous spaces
-                    tag_name = tag_name.strip()
-                    tag = ''
-                    try:
-                        # if the tag already exists
-                        tag = Tag.objects.get(name=tag_name)
-                    except:
-                        # make a new tag
-                        tag = Tag(name=tag_name)
-                        tag.save()
-                    tags.append(tag)'''
-                tags = []
                 print "Successfully made tag list"
                 
-                if context == "None":
-                    context = None
-                else:
-                    context = Context.objects.get(name=context)
+                context = None
+                if raw_context != "None":
+                    context = Context.objects.get(name=raw_context)
                     
                 # let's make the new todo!
                 # all new todos start in 'someday'
                 todo = Todo(name=name,context=context,bin='someday')
                 todo.save()
                 # add tags to new todo
-                for tag in tags:
-                    todo.tags.add(tag)
-                todo.save()
+                
+                if tag_objects:
+                    for tag in tag_objects:
+                        todo.tags.add(tag)
+                    todo.save()
                 
                 print "Success"
                 print "Successfully saved new todo #" + str(todo.pk)
@@ -112,4 +100,4 @@ def index(request):
         tags = Tag.objects.all()
         contexts = Context.objects.all()
         
-        return render_to_response('index.html', {'tags' : tags, 'todos_today' : todos_today, 'todos_upcoming' : todos_upcoming, 'todos_someday' : todos_someday, 'contexts' : contexts },context_instance=RequestContext(request))
+        return render_to_response('index.html', {'tags' : tags, 'todos_today' : todos_today, 'todos_upcoming' : todos_upcoming, 'todos_someday' : todos_someday, 'contexts' : contexts }, context_instance=RequestContext(request))

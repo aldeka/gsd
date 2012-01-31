@@ -60,6 +60,7 @@ function todoGenerator(pk, todoText) {
 $("#add-new-form").live('submit', function(event) {
     var newTodoName = $("#new-todo-name").val();
     var newTodoContext = $("#new-todo-context").val();
+    var newTodoDeadline = $("#new-todo-deadline").val();
 
     // the tags still need to be trimmed / cleaned up
     var newTodoTagsRaw = $("#new-todo-tags").val();
@@ -69,6 +70,7 @@ $("#add-new-form").live('submit', function(event) {
     $.post("/", { 
         operation: "creation",
         todoName: newTodoName,
+        todoDueDate: newTodoDeadline,
         todoContext: newTodoContext,
         todoTagList: newTodoTagsRaw,
     },
