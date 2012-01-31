@@ -69,14 +69,14 @@ def index(request):
                 # all new todos start in 'someday'
                 todo = Todo(name=name,context=context,bin='someday')
                 todo.save()
+                print "Did initial save of todo #" + str(todo.pk)
+                # broken pipe error occurs after here
                 # add tags to new todo
-                
                 if tag_objects:
                     for tag in tag_objects:
                         todo.tags.add(tag)
                     todo.save()
                 
-                print "Success"
                 print "Successfully saved new todo #" + str(todo.pk)
                 
                 message = str(todo.pk)
