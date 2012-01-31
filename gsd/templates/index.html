@@ -38,7 +38,7 @@
     <h3>Upcoming</h3>
     <ul id="upcoming-todos" class="todo-list">
     {% for todo in todos_upcoming %}
-        <li id="todo-{{ todo.pk }}" class="todo {% for tag in todo.tags.all %}tag-{{ tag.name }}{% endfor %}" {% if todo.context %}style="background-color: #{{ context.color }};"{% endif %}><a href="" class="check-link">ch</a> <span class="todo-name">{{ todo.name }}</span> <a href="" class="delete-link">x</a>
+        <li id="todo-{{ todo.pk }}" class="todo {% for tag in todo.tags.all %}tag-{{ tag.name }}{% endfor %}" {% if todo.context %}style="background-color: #{{ context.color }};"{% endif %}><a href="" class="check-link">&nbsp;</a> <span class="todo-name">{{ todo.name }}</span> <a href="" class="delete-link">x</a>
         <div class="todo-metadata">
             {% if todo.duedate %}<span class="todo-meta-item duedate {% if todo.is_overdue %}overdue{% endif %}"><span class="icon duedate-icon">Due</span> {{ todo.duedate }}</span>{% else %}<span class="todo-meta-item duedate"><span class="icon duedate-icon">Due</span> --</span>{% endif %}
             <span class="todo-meta-item context"><span class="icon context-icon">C</span> {% if todo.context %}{{ todo.context.name }}{% else %}None{% endif %}</span> 
@@ -53,7 +53,7 @@
     <h3>Someday</h3>
     <ul id="someday-todos" class="todo-list">
     {% for todo in todos_someday %}
-        <li id="todo-{{ todo.pk }}" class="todo {% for tag in todo.tags.all %}tag-{{ tag.name }}{% endfor %}" {% if todo.context %}style="background-color: #{{ context.color }};"{% endif %}><a href="" class="check-link">ch</a> <span class="todo-name">{{ todo.name }}</span> <a href="" class="delete-link">x</a>
+        <li id="todo-{{ todo.pk }}" class="todo {% for tag in todo.tags.all %}tag-{{ tag.name }}{% endfor %}" {% if todo.context %}style="background-color: #{{ context.color }};"{% endif %}><a href="" class="check-link">&nbsp;</a> <span class="todo-name">{{ todo.name }}</span> <a href="" class="delete-link">x</a>
         <div class="todo-metadata">
             {% if todo.duedate %}<span class="todo-meta-item duedate {% if todo.is_overdue %}overdue{% endif %}"><span class="icon duedate-icon">Due</span> {{ todo.duedate }}</span>{% else %}<span class="todo-meta-item duedate"><span class="icon duedate-icon">Due</span> --</span>{% endif %}
             <span class="todo-meta-item context"><span class="icon context-icon">C</span> {% if todo.context %}{{ todo.context.name }}{% else %}None{% endif %}</span> 
