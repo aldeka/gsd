@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="add-new">
+<h2>Add new todo</h2>
+    <form id="add-new-form">
+    New todo: <input id="new-todo-name" class="new-todo" type="text"></input> 
+    Due date: <input type="text" id="new-todo-duedate" class="new-todo" size="11"></input>
+    Context: 
+    <select id="new-todo-context" class="new-todo">
+        <option value="None"> -- </option>
+    {% for context in contexts %}
+        <option value="{{ context.name }}">{{ context.name }}</option>
+    {% endfor %}
+    </select>
+    Tags: <input id="new-todo-tags" class="new-todo" type="text"></input>
+    <input type="submit" value="Enter" />
+    </form>
+</div>
+
+<div class="column">
+    <h3>Today</h3>
+    <ul id="todays-todos" class="todo-list">
+    {% for todo in todos_today %}
+        <li id="todo-{{ todo.pk }}" class="todo {% for tag in todo.tags.all %}tag-{{ tag.name }}{% endfor %} {% if todo.is_done %}checked{% endif %}" {% if todo.context %}style="background-color: #{{ context.color }};"{% endif %}><a href="" class="check-link">&nbsp;</a> <span class="todo-name">{{ todo.name }}</span> <a href="" class="delete-link">x</a>
+        <div class="todo-metadata">
+            {% if todo.duedate %}<span class="todo-meta-item duedate {% if todo.is_overdue %}overdue{% endif %}"><span class="icon duedate-icon">Due</span> {{ todo.duedate }}</span>{% else %}<span class="todo-meta-item duedate"><span class="icon duedate-icon">Due</span> --</span>{% endif %}
+            <span class="todo-meta-item context"><span class="icon context-icon">C</span> {% if todo.context %}{{ todo.context.name }}{% else %}None{% endif %}</span> 
+            <span class="todo-meta-item tags"><span class="icon tags-icon">T</span> {% if todo.tags %}{% for tag in todo.tags.all %}{{ tag.name }} {% endfor %}{% else %}--{% endif %}</span>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+
+<div class="column">
+    <h3>Upcoming</h3>
+    <ul id="upcoming-todos" class="todo-list">
+    {% for todo in todos_upcoming %}
+        <li id="todo-{{ todo.pk }}" class="todo {% for tag in todo.tags.all %}tag-{{ tag.name }}{% endfor %}" {% if todo.context %}style="background-color: #{{ context.color }};"{% endif %}><a href="" class="check-link">ch</a> <span class="todo-name">{{ todo.name }}</span> <a href="" class="delete-link">x</a>
+        <div class="todo-metadata">
+            {% if todo.duedate %}<span class="todo-meta-item duedate {% if todo.is_overdue %}overdue{% endif %}"><span class="icon duedate-icon">Due</span> {{ todo.duedate }}</span>{% else %}<span class="todo-meta-item duedate"><span class="icon duedate-icon">Due</span> --</span>{% endif %}
+            <span class="todo-meta-item context"><span class="icon context-icon">C</span> {% if todo.context %}{{ todo.context.name }}{% else %}None{% endif %}</span> 
+            <span class="todo-meta-item tags"><span class="icon tags-icon">T</span> {% if todo.tags %}{% for tag in todo.tags.all %}{{ tag.name }} {% endfor %}{% else %}--{% endif %}</span>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+
+<div class="column">
+    <h3>Someday</h3>
+    <ul id="someday-todos" class="todo-list">
+    {% for todo in todos_someday %}
+        <li id="todo-{{ todo.pk }}" class="todo {% for tag in todo.tags.all %}tag-{{ tag.name }}{% endfor %}" {% if todo.context %}style="background-color: #{{ context.color }};"{% endif %}><a href="" class="check-link">ch</a> <span class="todo-name">{{ todo.name }}</span> <a href="" class="delete-link">x</a>
+        <div class="todo-metadata">
+            {% if todo.duedate %}<span class="todo-meta-item duedate {% if todo.is_overdue %}overdue{% endif %}"><span class="icon duedate-icon">Due</span> {{ todo.duedate }}</span>{% else %}<span class="todo-meta-item duedate"><span class="icon duedate-icon">Due</span> --</span>{% endif %}
+            <span class="todo-meta-item context"><span class="icon context-icon">C</span> {% if todo.context %}{{ todo.context.name }}{% else %}None{% endif %}</span> 
+            <span class="todo-meta-item tags"><span class="icon tags-icon">T</span> {% if todo.tags %}{% for tag in todo.tags.all %}{{ tag.name }} {% endfor %}{% else %}--{% endif %}</span>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+<br style="clear: both;" />
+&nbsp;
+<a id="clear-link" href="">Clear checked todos</a>
+
+<script>
+    /* handles autocomplete functionality */
+    $(function() {
+        var availableTags = [
+            {% for tag in tags %}"{{tag.name}}",{% endfor %}
+            ];
+        function split( val ) {
+            return val.split( /,\s*/ );
+        }
+        function extractLast( term ) {
+            return split( term ).pop();
+        }
+
+        $( "#new-todo-tags" )
+            // don't navigate away from the field on tab when selecting an item
+            .bind( "keydown", function( event ) {
+                if ( event.keyCode === $.ui.keyCode.TAB &&
+                        $( this ).data( "autocomplete" ).menu.active ) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                minLength: 0,
+                source: function( request, response ) {
+                    // delegate back to autocomplete, but extract the last term
+                    response( $.ui.autocomplete.filter(
+                        availableTags, extractLast( request.term ) ) );
+                },
+                focus: function() {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function( event, ui ) {
+                    var terms = split( this.value );
+                    // remove the current input
+                    terms.pop();
+                    // add the selected item
+                    terms.push( ui.item.value );
+                    // add placeholder to get the comma-and-space at the end
+                    terms.push( "" );
+                    this.value = terms.join( ", " );
+                    return false;
+                }
+            });
+    });
+    </script>
+
+{% endblock content %}
