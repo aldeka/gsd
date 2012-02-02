@@ -1,14 +1,17 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import simplejson
 from gsd.models import Todo, Tag, Context
 
 def index(request):
     if request.is_ajax():
         if request.method == 'GET':
             message = "This is an XHR GET request"
+            mime='text'
         elif request.method == 'POST':
             message = ''
+            mime='text'
             if request.POST["operation"] == "checkoff":
                 # handles checking and unchecking of todos
                 pk = request.POST["todo"]
@@ -40,6 +43,8 @@ def index(request):
                     message = "Error: Moved todo doesn't exist"
                     
             elif request.POST["operation"] == "creation":
+                tags_objects = []
+                
                 # handles making a new Todo
                 print "Creating todo"
                 data = request.POST
@@ -53,10 +58,8 @@ def index(request):
                 # make tags lowercase, remove spaces, 
                 # and split on commas into a list
                 tag_names = tags_raw.lower().replace(' ','').split(',')
-                tags_objects = []
-                
                 for tag in tag_names:
-                    t = Tag.objects.get_or_create(name=tag)
+                    t,_ = Tag.objects.get_or_create(name=tag)
                     tags_objects.append(t)
                 
                 print "Successfully made tag list"
@@ -72,17 +75,22 @@ def index(request):
                 print "Did initial save of todo #" + str(todo.pk)
                 # broken pipe error occurs after here
                 # add tags to new todo
-                if tag_objects:
-                    for tag in tag_objects:
+                if tags_objects:
+                    for tag in tags_objects:
                         todo.tags.add(tag)
                     todo.save()
                 
                 print "Successfully saved new todo #" + str(todo.pk)
                 
-                message = str(todo.pk)
+                todo_dict = {'pk': todo.pk, 'name': todo.name, 'context': todo.context, 'tags': tag_names, 'duedate': todo.due_date}
+                todo_json = simplejson.dumps(todo_dict)
+                print todo_json
+                message = todo_json
+                mime = 'application/json'
                 
             elif request.POST["operation"] == "deletion":
                 # handles deletion of todos
+                mime = 'text'
                 pk = request.POST["todo"]
                 try:
                     todo = Todo.objects.get(pk=pk)
@@ -90,7 +98,7 @@ def index(request):
                     message = "Successfully deleted todo #" + str(pk)
                 except DoesNotExist:
                     message = "Error: Deleted todo doesn't exist"
-        return HttpResponse(message)
+        return HttpResponse(message,mime)
     else:
         todos_today = Todo.objects.filter(bin='today')
         todos_upcoming = Todo.objects.filter(bin='soon')

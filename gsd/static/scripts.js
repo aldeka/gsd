@@ -53,11 +53,44 @@ $(".check-link").live('click', function(event) {
     return false;
 });
 
-function todoGenerator(pk, todoText) {
+function todoGeneratorOld(pk, todoText) {
     return '<li id="todo-' + pk.toString() + '" class="todo"><span contenteditable="true">' + todoText + '</span> -- <a href="" class="check-link">check</a> -- <a href="" class="delete-link">X</a></li>';
 };
 
+function todoGenerator(pk, todoText, todoDueDate, todoOverdue, todoContext, todoContextColor, todoTagsList) {
+    // le default values setup
+    if (!todoDueDate) {
+        todoDueDate = '--';
+    }
+    if (!todoOverdue) {
+        todoOverdue = '';
+    }
+    if (!todoContext) {
+        todoContext = '--';
+        todoContextColor='e9e9e9';
+    }
+    if (!todoTagsList) {
+        todoTagsList = [];
+    }
+    
+    var tags = '';
+    var tagClasses = '';
+    _.each(todoTagsList,function(tag){
+        tags = tags + tag + ' ';
+        tagClasses = tags + 'tag-' + tag + ' ';
+    });
+    
+    if (tags == '') {
+        tags = '--';
+    }
+
+    return '<li id="todo-' + pk.toString() + '" class="todo ' + tagClasses + '" style="background-color: #' + todoContextColor + ';"><a href="" class="check-link">&nbsp;</a> <span class="todo-name">' + todoText + '</span> <a href="" class="delete-link">x</a><div class="todo-metadata"><span class="todo-meta-item duedate ' + todoOverdue + '"><span class="icon duedate-icon">Due</span> ' + todoDueDate + ' </span> <span class="todo-meta-item context"><span class="icon context-icon">C</span> ' + todoContext + '</span> <span class="todo-meta-item tags"><span class="icon tags-icon">T</span> ' + tags + ' </span></div></li>';
+        
+}
+
 $("#add-new-form").live('submit', function(event) {
+    event.preventDefault();
+    console.log('clicked submit');
     var newTodoName = $("#new-todo-name").val();
     var newTodoContext = $("#new-todo-context").val();
     var newTodoDeadline = $("#new-todo-deadline").val();
@@ -75,17 +108,17 @@ $("#add-new-form").live('submit', function(event) {
         todoTagList: newTodoTagsRaw,
     },
         function(data) {
+            console.log('receiving reply data');
             console.log(data);
-            id = parseInt(data);
+            var id = parseInt(data['pk']);
+            var name = data['name'];
+            
+            $("#someday-todos").append(todoGenerator(id, name));
+            $(".new-todo").val("");
         }
     );
     
-    pk = id;
     
-    $("#someday-todos").append(todoGenerator(pk, newTodoName));
-    $(".new-todo").val("");
-    
-    event.preventDefault();
 });
 
 $(document).ready(function() {
