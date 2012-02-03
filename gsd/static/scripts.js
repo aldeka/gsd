@@ -109,11 +109,16 @@ $("#add-new-form").live('submit', function(event) {
     },
         function(data) {
             console.log('receiving reply data');
-            console.log(data);
+            // {'pk': todo.pk, 'name': todo.name, 'context': todo.context.name, 'contextcolor': todo.context.color, 'tags': tag_names, 'duedate': todo.due_date}
+            // todoText, todoDueDate, todoOverdue, todoContext, todoContextColor, todoTagsList
             var id = parseInt(data['pk']);
             var name = data['name'];
+            var context = data['context'];
+            var color = data['contextcolor'];
+            var tagsList = data['tag_names'];
+            var dueDate = data['duedate'];
             
-            $("#someday-todos").append(todoGenerator(id, name));
+            $("#someday-todos").append(todoGenerator(id, name,dueDate,'',context,color,tagsList));
             $(".new-todo").val("");
         }
     );

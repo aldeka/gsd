@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
 from gsd.models import Todo, Tag, Context
+import datetime
 
 def index(request):
     if request.is_ajax():
@@ -82,7 +83,18 @@ def index(request):
                 
                 print "Successfully saved new todo #" + str(todo.pk)
                 
-                todo_dict = {'pk': todo.pk, 'name': todo.name, 'context': todo.context, 'tags': tag_names, 'duedate': todo.due_date}
+                context = None
+                color = None
+                if todo.context:
+                    context = todo.context.name
+                    color = todo.context.color
+                    
+                overdue = False
+                if todo.due_date:
+                    if datetime.date.today() >= todo.due_date:
+                        overdue = True
+                    
+                todo_dict = {'pk': todo.pk, 'name': todo.name, 'context': context, 'contextcolor': color, 'tags': tag_names, 'duedate': todo.due_date, 'overdue': overdue }
                 todo_json = simplejson.dumps(todo_dict)
                 print todo_json
                 message = todo_json
