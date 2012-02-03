@@ -53,10 +53,6 @@ $(".check-link").live('click', function(event) {
     return false;
 });
 
-function todoGeneratorOld(pk, todoText) {
-    return '<li id="todo-' + pk.toString() + '" class="todo"><span contenteditable="true">' + todoText + '</span> -- <a href="" class="check-link">check</a> -- <a href="" class="delete-link">X</a></li>';
-};
-
 function todoGenerator(pk, todoText, todoDueDate, todoOverdue, todoContext, todoContextColor, todoTagsList) {
     // le default values setup
     if (!todoDueDate) {
