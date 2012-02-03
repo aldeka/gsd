@@ -20,7 +20,7 @@
 </div>
 
 <div class="column">
-    <h3>Today</h3>
+    <h3 id="today">Today</h3>
     <ul id="todays-todos" class="todo-list">
     {% for todo in todos_today %}
         <li id="todo-{{ todo.pk }}" class="todo {% for tag in todo.tags.all %}tag-{{ tag.name }}{% endfor %} {% if todo.is_done %}checked{% endif %}" {% if todo.context %}style="background-color: #{{ context.color }};"{% endif %}><a href="" class="check-link">&nbsp;</a> <span class="todo-name">{{ todo.name }}</span> <a href="" class="delete-link">x</a>

@@ -2,20 +2,22 @@ body {
     margin: 0;
     padding: 0;
     font-size: 12pt;
-    background: #a3a3a3;
+    background: #fff;
     color: #333;
     }
     
 a {
-    color: #116599;
+    color: #ddedff;#116599;
     }
     
 h1, h2, h3, h4 {
-    color: black;
+    color: #111;
     }
+
     
 h1 {
     margin: 5px 0;
+    color: white;
     }
     
 h2 {
@@ -23,18 +25,23 @@ h2 {
     }
     
 h3 {
+    color: white;
     margin: 10px 0 0 0;
     padding: 5px 5px 5px 10px;
-    background: #ddedff;
+    background: #1188aa;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     }
+    
+h3#today {
+    background: #dd1155;
+}
     
 #container {
     margin: 0 auto;
     padding: 5px 10px;
     width: 930px;
-    background: #f6f6f6;
+    background: #333;
     }
     
 #add-new {
@@ -136,11 +143,11 @@ li .context-icon {
     }
     
 li .tags-icon {
-    background-color: #FCBBFC;
-    border-top: 1pt solid #ffcdff;
-    border-left: 1pt solid #ffcdff;
-    border-bottom: 1pt solid #e9aae9;
-    border-right: 1pt solid #e9aae9;
+    background-color: #bbcbff;
+    border-top: 1pt solid #ddedff;
+    border-left: 1pt solid #ddedff;
+    border-bottom: 1pt solid #99a9ee;
+    border-right: 1pt solid #99a9ee;
     padding: 1px 4px;
     }
     
