@@ -67,10 +67,16 @@ function todoGenerator(pk, todoText, todoDueDate, todoOverdue, todoContext, todo
     }
     if (!todoContext) {
         todoContext = '--';
-        todoContextColor='e9e9e9';
     }
     if (!todoTagsList) {
         todoTagsList = [];
+    }
+    
+    if (todoContextColor) {
+        colorStyle = '" style="background-color: #' + todoContextColor + ';"';
+    }
+    else {
+        colorStyle = '';
     }
     
     var tags = '';
@@ -84,7 +90,7 @@ function todoGenerator(pk, todoText, todoDueDate, todoOverdue, todoContext, todo
         tags = '--';
     }
 
-    return '<li id="todo-' + pk.toString() + '" class="todo ' + tagClasses + '" style="background-color: #' + todoContextColor + ';"><a href="" class="check-link">&nbsp;</a> <span class="todo-name">' + todoText + '</span> <a href="" class="delete-link">x</a><div class="todo-metadata"><span class="todo-meta-item duedate ' + todoOverdue + '"><span class="icon duedate-icon">Due</span> ' + todoDueDate + ' </span> <span class="todo-meta-item context"><span class="icon context-icon">C</span> ' + todoContext + '</span> <span class="todo-meta-item tags"><span class="icon tags-icon">T</span> ' + tags + ' </span></div></li>';
+    return '<li id="todo-' + pk.toString() + '" class="todo ' + tagClasses + colorStyle + '><a href="" class="check-link">&nbsp;</a> <span class="todo-name">' + todoText + '</span> <a href="" class="delete-link">x</a><div class="todo-metadata"><span class="todo-meta-item duedate ' + todoOverdue + '"><span class="icon duedate-icon">Due</span> ' + todoDueDate + ' </span> <span class="todo-meta-item context"><span class="icon context-icon">C</span> ' + todoContext + '</span> <span class="todo-meta-item tags"><span class="icon tags-icon">T</span> ' + tags + ' </span></div></li>';
         
 }
 
