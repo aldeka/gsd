@@ -7,6 +7,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 if os.path.exists("env/bin/activate_this.py"):
     execfile("env/bin/activate_this.py", globals(), locals())
 
+print << sys.stderr os.path.abspath(__file__)
+print << os.getcwd()
 sys.path.append('..')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
