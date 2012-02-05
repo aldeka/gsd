@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 import os
 import sys
+import os.path
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))	
+if os.path.exists("env/bin/activate_this.py"):
+    execfile("env/bin/activate_this.py", globals(), locals())
 
 sys.path.append('..')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
